@@ -6,13 +6,16 @@
 ##############################################################
 
 
-AESD_ASSIGNMENTS_VERSION = 'ed170749178c2b24ab0b0af1bc6afa7fad22d928'
+AESD_ASSIGNMENTS_VERSION = '9ff4a994380ae7a03c45ba2d40fa9f07134aa6a6'
 # Note: Be sure to reference the *ssh* repository URL here (not https) to work properly
 # with ssh keys and the automated build/test system.
 # Your site should start with git@github.com:
+
 AESD_ASSIGNMENTS_SITE = 'git@github.com:cu-ecen-aeld/assignments-3-and-later-RaduchychDenys.git'
 AESD_ASSIGNMENTS_SITE_METHOD = git
 AESD_ASSIGNMENTS_GIT_SUBMODULES = YES
+
+AESD_ASSIGNMENTS_MODULE_SUBDIRS = aesd-char-driver
 
 define AESD_ASSIGNMENTS_BUILD_CMDS
 	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)/finder-app all
@@ -33,7 +36,13 @@ define AESD_ASSIGNMENTS_INSTALL_TARGET_CMDS
 	$(INSTALL) -m 0755 $(@D)/finder-app/writer $(TARGET_DIR)/bin
 	$(INSTALL) -m 0755 $(@D)/finder-app/finder.sh $(TARGET_DIR)/bin
 	$(INSTALL) -m 0755 $(@D)/finder-app/finder-test.sh $(TARGET_DIR)/bin
-    $(INSTALL) -m 0766 $(@D)/server/aesdsocket $(TARGET_DIR)/usr/bin
+	$(INSTALL) -m 0766 $(@D)/server/aesdsocket $(TARGET_DIR)/usr/bin
+
+#aesd-char-device init scripts
+	$(INSTALL) -m 0755 $(@D)/aesd-char-driver/aesdchar_load $(TARGET_DIR)/bin
+	$(INSTALL) -m 0755 $(@D)/aesd-char-driver/aesdchar_unload $(TARGET_DIR)/bin
+
 endef
 
+$(eval $(kernel-module))
 $(eval $(generic-package))
